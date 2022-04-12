@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Agn生成器</title>
+    <title>Agn评分生成器</title>
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -156,14 +156,13 @@
     <p class="h4">AGN 生成器
         <button class="btn btn-primary btn-md" @click="lemon=false">AGN模式</button>
         <button class="btn btn-warning btn-md" @click="lemon=true">酸🍋模式</button>
-        <a href="search.html">查询评分</a>
     </p>
     <div class="alert alert-info" role="alert">
-        <p class="h5">2019/06/06更新：</p>
+        <p class="h5">AGN评委守则：</p>
         <ol>
-            <li>脚本替换为https</li>
-            <li>抽奖脚本https支持 <a href="https://greasyfork.org/zh-CN/scripts/375741" >→Acfun助手←</a></li>
-            <li>源代码见 <a href="helper/helper.js" >→源码←</a></li>
+            <li>坚持公正公平客观公开原则进行评分</li>
+            <li>自觉接受Acfuner的监督与批评</li>
+            <li>维护评分的严肃性和权威性</li>
         </ol>
     </div>
     <div class="form-group">
@@ -183,15 +182,15 @@
         <input type="text" id="comment" class="form-control input-sm"  v-model="comment" >
     </div>
     <div class="form-group">
-        <label for="content">内容 <button class="btn btn-sm btn-danger"  @click="content = ''">清空</button></label>
-        <textarea id="content" class="form-control input-sm"  v-model="content" rows="7"></textarea>
+        <label for="content">评分内容 </label>
+        <textarea id="content" class="form-control input-sm"  v-model="content" rows="7" value="123"></textarea>
     </div>
     <div class="form-group">
         <label for="summary">总评</label>
         <input type="text" id="summary" class="form-control input-sm"  v-model="summary" >
     </div>
      <div class="form-group">
-        <label for="score">评分</label>
+        <label for="score">AGN分数</label>
         <input type="range" id="score" class="form-control input-sm"  v-model.number="score" max="10" min="0" step="0.1">
     </div>
       <div class="form-group">
@@ -381,7 +380,7 @@
                     // this.summaryColor = 'purple'
                 }
                 if(this.score === 10){
-                    this.summary = '文豪'
+                    this.summary = '旷世佳作'
                     // this.summaryColor = 'yellow'
                 }
             },
