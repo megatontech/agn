@@ -17,11 +17,15 @@
     <script crossorigin="anonymous" integrity="sha384-S2QR8FFC2taQMwIsBKVmvYCBnA1MewmutcASWe7y9srSL5A6PXmZPJ7iq1Np/GqS" src="https://lib.baomitu.com/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
     <script crossorigin="anonymous" integrity="sha384-8CYhPwYlLELodlcQV713V9ZikA3DlCVaXFDpjHfP8Z36gpddf/Vrt47XmKDsCttu" src="https://lib.baomitu.com/clipboard.js/2.0.4/clipboard.min.js"></script>
     <script crossorigin="anonymous" integrity="sha384-c9m22wgYuGmVnDbqtDiQ7GJ8H4LzJBB4sUBGVPWyVc6gmku4Z5FwBjphfR6245v6" src="https://lib.baomitu.com/konva/3.1.0/konva.min.js"></script>
+    <script crossorigin="anonymous"  src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/axios/0.26.1/axios.min.js"></script>
+    
     <style>
         .container{
             padding: 15px;
         }
         .score {
+            text-shadow: 5px 1px 0px rgba(0, 0, 0, 0.3);
             position: absolute;
             width: 150px;
             height: 150px;
@@ -30,6 +34,7 @@
             top: 100px;
         }
         .scoretxt{
+            text-shadow: 5px 1px 0px rgba(0, 0, 0, 0.3);
              font-size: 38px;
             color: #fff;
             line-height: 150px;
@@ -40,8 +45,11 @@
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
-            width: 100%;
-            background: url(./bg.png) top left/cover no-repeat;
+            border: 0px inset rgba(100, 100, 100, 1);
+  border-radius: 14px;
+
+            width: 60%;
+            /* background: url(./bg.png) top left/cover no-repeat; */
         }
         .bgg{
             color: #fff!important;
@@ -54,26 +62,44 @@
         }
         .acid{
             position: absolute;
-            right: 10px;
-            top: -20px;
+            right: 40px;
+            top: 15px;
             text-align: right;
+            line-height: 40px;
         }
         .title{
             margin-left: -20px;
+            font-weight: bold;
+        }
+        .pfimg{
+            position: absolute;
+            height: 40px;
+            top: 20px;
+            left: 100px;
+            border-radius: 4px;
+        }
+        .acfun{
+            width: 300px;
+            height: 88px;
+            background: url(./acimg/logo/logo02.jpg) top left/cover no-repeat;
+            margin-left: -20px;
+            text-indent: 127px;
+            line-height: 54px;
+            white-space: nowrap;
         }
         .author{
             width: 220px;
             height: 68px;
-            background: url(./avatar.png) top left/cover no-repeat;
+            /* background: url(./acimg/logo/logo02.jpg) top left/cover no-repeat; */
             margin-left: -20px;
-            text-indent: 127px;
+            text-indent: 170px;
             line-height: 54px;
             white-space: nowrap;
         }
         .posttime{
             color: #999;
             line-height: normal;
-               text-indent: 70px;
+               text-indent: 170px;
                font-size: 12px;
                height: 12px;
                margin-top: -10px;
@@ -133,18 +159,81 @@
             border: none;
             color: inherit!important;
         }
+
+        .containeragn {
+                        /* Center the content */
+                        align-items: center;
+                        display: flex;
+                        justify-content: center;
+
+                        /* Background color */
+                        background-color: #bbb;
+
+                        /* Size */
+                        height: 32px;
+
+                        /* Use to position the corners */
+                        position: relative;
+                    }
+
+                    .containeragn__side {
+                        bottom: -8px;
+                        position: absolute;
+
+                        /* Displayed under the containeragn */
+                        z-index: -1;
+
+                        /* Background */
+                        border: 16px solid #ccc;
+                        border-left-color: transparent;
+                    }
+
+                    .containeragn__side--left {
+                        /* Position */
+                        left: -24px;
+                    }
+
+                    .containeragn__side--right {
+                        /* Position */
+                        right: -24px;
+                        transform:rotate(180deg);
+                    }
+
+                    .containeragn__triangle {
+                        position: absolute;
+                        top: 100%;
+
+                        border: 8px solid transparent;
+                        border-bottom-width: 0;
+                        border-top-color: #aaa;
+                    }
+
+                    .containeragn__triangle--left {
+                        border-right-width: 0;
+                        left: 0;
+                    }
+
+                    .containeragn__triangle--right {
+                        border-left-width: 0;
+                        right: 0;
+                    }
+        .agncontent{
+            -webkit-text-stroke: 0.2px rgba(117, 117, 117, 0.452);
+        }
         .article-content{
             background: transparent;
             border: none;
+            font-weight: bold;
             color: inherit!important;
-            height: 112px;
             overflow: hidden;
             white-space: normal;
-            padding-top: 60px;
-            margin-left: -20px;
-            text-indent: 2em;
+            padding-top: 10px;
+            margin-left: 0px;
+            text-indent: 0em;
             font-size: 12px;
         }
+
+        
         [v-cloak]{
             display: none;
         }
@@ -164,6 +253,10 @@
             <li>自觉接受Acfuner的监督与批评</li>
             <li>维护评分的严肃性和权威性</li>
         </ol>
+    </div>
+    <div class="form-group">
+        <label for="articleInfo">文章articleInfo</label>
+        <input type="text" id="articleInfo" class="form-control input-sm" @blur="setArticle" v-model="articleInfo" >
     </div>
     <div class="form-group">
         <label for="article">文章网址/Ac号</label>
@@ -215,18 +308,17 @@
      <div class="form-group">
         <label for="content">预览
             <button class="btn btn-sm btn-success" v-if="acid" @click="captureImage">下载</button>
-            <button class="btn btn-sm btn-success" v-if="acid" @click="uploadAndCopy">上传图片</button>
-            {{uploadUrl}}
-            <button class="btn btn-sm btn-success clipboard" :data-clipboard-text="uploadUrl" >复制链接</button>
         </label>
         <div style="position: relative;overflow: hidden">
             <div class="preview" v-if="!lemon">
                 <div class="col-md-6 col-xs-6 col-sm-6" style="position: relative">
+                    <div class="text-overflow acfun"></div>
+
                     <p class="text-overflow h4 title">{{title}}</p>
-                    <pre class="article-content" v-text="articleContent"></pre>
-                    <div class="text-overflow author">{{author}}
+                    <pre class="article-content" v-text="channelId">{{channelId}}</pre>
+                    <div class="text-overflow author">UP主:{{author}}
                     <div class="posttime" v-if="posttime">
-                        {{moment(posttime).format('YYYY年MM月DD日 HH:mm:ss')}}
+                        {{moment(posttime).format('YYYY年MM月DD日')}}
                     </div>
                     </div>
                     <div class="score">
@@ -239,13 +331,29 @@
                     <div class="clearfix"></div>
                 </div>
                 <div class="col-md-6 col-xs-6 col-sm-6 bgg" :style="{background:bgc,color:fontcolor+'!important'}">
-                    <p class="h1" :style="{color:summaryColor,'text-shadow': '0.5px 0.5px #bbb'}">{{summary}} </p>
+                    <p class="h1" :style="{color:summaryColor,'-webkit-text-stroke': '2px rgb(233, 233, 233)','text-shadow': '2.5px 1.5px #bbb'}">{{summary}} </p>
+                    <img class="pfimg" :src='scoreimg'>
                     <div class="acid" >
-                        <p class="h2">AGN·中国</p>
-                        {{acid}}
+                        <div class="containeragn">
+                            <!-- The content -->
+                            AGN♂中国
+                        
+                            <!-- The left side -->
+                            <div class="containeragn__side containeragn__side--left"></div>
+                        
+                            <!-- The left triangle displayed below the content -->
+                            <div class="containeragn__triangle containeragn__triangle--left"></div>
+                        
+                            <!-- The right triangle displayed below the content -->
+                            <div class="containeragn__triangle containeragn__triangle--right"></div>
+                        
+                            <!-- The right side -->
+                            <div class="containeragn__side containeragn__side--right"></div>
+                        </div>
+                        <p>{{acid}}</p>
 
                     </div>
-                    <p class="text-overflow" v-html="content.replace(/\n/g,'<br>')"></p>
+                    <p class="text-overflow agncontent" v-html="content.replace(/\n/g,'</li><br><li>')"></p>
                     <p>评论员：{{comment}}  {{moment().format('YYYY年MM月DD日')}}</p>
                 </div>
                 <div class="clearfix"></div>
@@ -277,12 +385,14 @@
         data(){
             return {
                 score:4.5,
+                scoreimg:'./acimg/pf/4.jpg',
                 lemon:false,
                 title:'',
                 summary:'尚可',
                 articleContent:'',
-                content:'',
-                comment:localStorage.getItem('comment')||'AGN评委-Biscay',
+                content:'<li>\n\n</li>',
+                comment:'AGN评委-Biscay',
+                articleInfo:'',
                 article:'',
                 author:'',
                 acid:'',
@@ -339,6 +449,18 @@
             // add the layer to the stage 
             stage.add(this.layer);
             })
+
+            var storage = window.localStorage;
+            this.articleInfo = storage["acinfo"] ;
+            var artmodel =JSON.parse(this.articleInfo);console.log(artmodel);
+               this.title=artmodel.title;
+               this.article="ac"+artmodel.shareUrl.split('=')[1];
+               this.author=artmodel.user.name;
+               this.acid="ac"+artmodel.shareUrl.split('=')[1];
+               this.posttime=artmodel.createTime;
+               this.channelId=artmodel.channel.parentName+"-"+artmodel.channel.name;
+               this.releaseDate=artmodel.createTime;
+               var storage = window.localStorage;
         },
         watch:{
             comment(nv){
@@ -365,23 +487,36 @@
             setSummary(){
                 if(this.score >= 0&& this.score <= 2.9){
                     this.summary = '拙劣'
+                    if(this.score >= 0&& this.score <= 0.9){this.scoreimg='./acimg/pf/0.jpg';}
+                    else if(this.score >= 1&& this.score <= 1.9){this.scoreimg='./acimg/pf/1.jpg';}
+                    else if(this.score >= 2&& this.score <= 2.9){this.scoreimg='./acimg/pf/2.jpg';}
+                    
                     // this.summaryColor = 'white'
+
                 }
                 if(this.score >= 3&& this.score <= 5.9){
                     this.summary = '尚可'
                     // this.summaryColor = 'blue'
+                    if(this.score >= 3&& this.score <= 3.9){this.scoreimg='./acimg/pf/3.jpg';}
+                    else if(this.score >= 4&& this.score <= 4.9){this.scoreimg='./acimg/pf/4.jpg';}
+                    else if(this.score >= 5&& this.score <= 5.9){this.scoreimg='./acimg/pf/5.jpg';}
                 }
                 if(this.score >= 6&& this.score <= 7.9){
                     this.summary = '优秀'
                     // this.summaryColor = 'green'
+                    if(this.score >= 6&& this.score <= 6.9){this.scoreimg='./acimg/pf/6.jpg';}
+                    else if(this.score >= 7&& this.score <= 7.9){this.scoreimg='./acimg/pf/7.jpg';}
                 }
                 if(this.score >= 8&& this.score <= 9.9){
                     this.summary = '卓越'
                     // this.summaryColor = 'purple'
+                    if(this.score >= 8&& this.score <= 8.9){this.scoreimg='./acimg/pf/8.jpg';}
+                     else if(this.score >= 9&& this.score <= 9.9){this.scoreimg='./acimg/pf/9.jpg';}
                 }
                 if(this.score === 10){
-                    this.summary = '旷世佳作'
+                    this.summary = '神作'
                     // this.summaryColor = 'yellow'
+                    this.scoreimg='./acimg/pf/10.jpg';
                 }
             },
             defaultColor(){
@@ -485,25 +620,37 @@
                     },'image/png');
                 })
             },
+            setArticle(){
+               var artmodel =JSON.parse(this.articleInfo);console.log(artmodel);
+               this.title=artmodel.title;
+               //this.articleContent=artmodel;
+               //this.content=artmodel.title;
+               this.article="ac"+artmodel.shareUrl.split('=')[1];
+               this.author=artmodel.user.name;
+               this.acid="ac"+artmodel.shareUrl.split('=')[1];
+               this.posttime=artmodel.createTime;
+               this.channelId=artmodel.channel.parentName+"-"+artmodel.channel.name;
+               this.releaseDate=artmodel.createTime;
+               var storage = window.localStorage;
+               storage["acinfo"] = JSON.stringify(artmodel);
+            },
             getArticle(){
-                let aid = +this.article.replace('https://www.acfun.cn/a/ac','').replace("ac","").replace("\/","").trim()
-                if(aid){
-                    axios.get(`https://acfun.leanapp.cn/acfun/contents/${aid}`).then(res=>{
-                        if(res.data.code === 200){
-                            this.title = res.data.data.title
-                            this.author = res.data.data.owner.name
-                            this.channelId = res.data.data.channelId
-                            var div = document.createElement('div')
-                            div.innerHTML = res.data.data.article.content
-                            this.articleContent = div.innerText
-                            this.releaseDate = res.data.data.releaseDate
-                            this.posttime = new Date(res.data.data.releaseDate)
-                        }
-                    })
-                    this.acid = `ac${aid}`
-                }else{
-                    this.acid = ''
-                }
+                // axios.defaults.baseURL = 'https://www.acfun.cn';
+                //     axios.get(`https://www.acfun.cn/a/ac34403697`).then(res=>{
+                //         console.log(res);
+                //         if(res.data.code === 200){
+                //             console.log(res);
+                //             this.title = res.data.data.title
+                //             this.author = res.data.data.owner.name
+                //             this.channelId = res.data.data.channelId
+                //             var div = document.createElement('div')
+                //             div.innerHTML = res.data.data.article.content
+                //             this.articleContent = div.innerText
+                //             this.releaseDate = res.data.data.releaseDate
+                //             this.posttime = new Date(res.data.data.releaseDate)
+                //         }
+                //     })
+                //     this.acid = `ac34403697`
             }
         }
     })
