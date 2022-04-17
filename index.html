@@ -87,6 +87,16 @@
             line-height: 54px;
             white-space: nowrap;
         }
+        .authorimg{
+        width: 50px;
+            height: 50px;
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+            border-radius: 50%;
+        }
         .author{
             width: 220px;
             height: 68px;
@@ -320,6 +330,7 @@
                     <div class="posttime" v-if="posttime">
                         {{moment(posttime).format('YYYY年MM月DD日')}}
                     </div>
+                        <div class="authorimg"><img :src="{{authorimg}}"></div>
                     </div>
                     <div class="score">
                           <div id="canvas" class="hexgon">
@@ -395,6 +406,7 @@
                 articleInfo:'',
                 article:'',
                 author:'',
+                authorimg:'',
                 acid:'',
                 posttime:'',
                 channelId:'',
@@ -627,6 +639,7 @@
                //this.content=artmodel.title;
                this.article="ac"+artmodel.shareUrl.split('=')[1];
                this.author=artmodel.user.name;
+               this.authorimg = artmodel.user.headUrl;
                this.acid="ac"+artmodel.shareUrl.split('=')[1];
                this.posttime=artmodel.createTime;
                this.channelId=artmodel.channel.parentName+"-"+artmodel.channel.name;
